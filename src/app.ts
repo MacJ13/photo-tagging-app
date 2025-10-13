@@ -4,6 +4,10 @@ import dotenv from "dotenv";
 import { PATH_ENV } from "./config/env.config";
 import indexRouter from "./routes/index.route";
 import path from "path";
+
+import session from "express-session";
+import { MONGO_STORE } from "./config/db.config";
+
 dotenv.config(PATH_ENV);
 
 const app = express();
@@ -14,6 +18,16 @@ app.set("views", path.join(__dirname, "views"));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "defaultsecret",
+    resave: false,
+    saveUninitialized: true,
+    store: MONGO_STORE,
+    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 }, // Set to true if using HTTPS
+  })
+);
 
 app.use("/", indexRouter);
 
