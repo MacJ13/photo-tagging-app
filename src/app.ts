@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import DBService from "./service/db.service";
 import dotenv from "dotenv";
 import { PATH_ENV } from "./config/env.config";
@@ -7,6 +7,7 @@ import path from "path";
 
 import session from "express-session";
 import { MONGO_STORE } from "./config/db.config";
+import passport from "./config/passport.config";
 
 dotenv.config(PATH_ENV);
 
@@ -28,6 +29,8 @@ app.use(
     cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 }, // Set to true if using HTTPS
   })
 );
+
+app.use(passport.session());
 
 app.use("/", indexRouter);
 
