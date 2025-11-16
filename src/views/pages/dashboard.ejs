@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><%= locals.title || "PHOTO APP ADMIN PANEL" %></title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f7fafc;
+      }
+      .container {
+        max-width: 420px;
+        margin: 48px auto;
+        background: #fff;
+        padding: 24px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      }
+      label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 600;
+      }
+      input[type="text"],
+      input[type="password"] {
+        width: 100%;
+        padding: 8px 10px;
+        margin-bottom: 6px;
+        border: 1px solid #e2e8f0;
+        border-radius: 4px;
+      }
+      button {
+        width: 100%;
+        padding: 10px;
+        background: #2b6cb0;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      a {
+                background: #2b6cb0;
+        color: white;
+        padding: 10px 15px;
+        text-decoration: none;  
+        border-radius: 4px;
+        font-weight: 600;
+        display: inline-block;
+      }
+      .help {
+        margin-top: 12px;
+        font-size: 13px;
+        color: #718096;
+      }
+      .field-error {
+        color: #c53030;
+        font-size: 13px;
+        margin-bottom: 6px;
+      }
+
+      .linkbox {
+        margin-top: 12px;
+        text-transform: uppercase;
+      }
+
+      .heading-box {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="heading-box">
+         <h1>Dashboard</h1>
+          <form action="/logout" method="POST">
+
+            <button type="submit">Logout</button>
+          </form>
+      </div>
+     
+        <p>Welcome to the admin dashboard of photo tagging.</p>
+        <div class="linkbox">
+            <a href="/images">Go to Images >></a>
+        </div>
+          <div class="linkbox">
+            <a href="/scores">Go to Scores >></a>
+        </div>
+    </div>
+  </body>
+</html>

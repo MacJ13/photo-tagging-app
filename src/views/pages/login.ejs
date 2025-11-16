@@ -26,7 +26,7 @@
       input[type="password"] {
         width: 100%;
         padding: 8px 10px;
-        margin-bottom: 12px;
+        margin-bottom: 6px;
         border: 1px solid #e2e8f0;
         border-radius: 4px;
       }
@@ -44,14 +44,27 @@
         font-size: 13px;
         color: #718096;
       }
+      .field-error {
+        color: #c53030;
+        font-size: 13px;
+        margin-bottom: 6px;
+      }
     </style>
   </head>
   <body>
     <div class="container">
       <h1>Login</h1>
 
-      <% if (typeof error !== 'undefined' && error) { %>
-      <div style="color: #c53030; margin-bottom: 12px"><%= error %></div>
+      <% 
+        // Accept validation errors passed either as `errors` (top-level) or as
+        // `locals.errors`. Also accept `formData` similarly.
+
+
+        const errors = locals.fieldErrors || undefined;
+      %>
+
+      <% if (typeof errors !== undefined && errors) { %>
+      <div style="color: #c53030; margin-bottom: 12px">Error!</div>
       <% } %>
 
       <form method="POST" action="/login">
@@ -65,7 +78,12 @@
             minlength="3"
             maxlength="100"
             autocomplete="username"
+            aria-invalid="<%= errors && errors.username ? 'true' : 'false' %>"
+            value="<%= locals.formData && locals.formData.username ? locals.formData.username : '' %>"
           />
+          <% if (errors && errors.username) { %>
+          <div class="field-error"><%= errors.username %></div>
+          <% } %>
         </div>
 
         <div>
@@ -77,7 +95,11 @@
             required
             minlength="6"
             autocomplete="current-password"
+            aria-invalid="<%= errors && errors.password ? 'true' : 'false' %>"
           />
+          <% if (errors && errors.password) { %>
+          <div class="field-error"><%= errors.password %></div>
+          <% } %>
         </div>
 
         <button type="submit">Sign in</button>
