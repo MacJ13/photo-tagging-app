@@ -25,9 +25,18 @@ const user_logout_post: HandlerType = (req, res, next) => {
   });
 };
 
+const user_dashboard_get: HandlerType = (req, res, next) => {
+  if (!req.user) {
+    res.redirect("/login");
+    return;
+  }
+
+  res.render("pages/dashboard", { title: "Dashboard" });
+};
+
 export default {
   index_home,
   user_login_get,
-
+  user_dashboard_get,
   user_logout_post,
 };

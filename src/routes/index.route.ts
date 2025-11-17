@@ -22,4 +22,6 @@ indexRouter.post(
 
 indexRouter.post("/logout", userController.user_logout_post);
 
+indexRouter.get("/dashboard", userController.user_dashboard_get);
+
 export default indexRouter;
