@@ -8,6 +8,7 @@ import path from "path";
 import session from "express-session";
 import { MONGO_STORE } from "./config/db.config";
 import passport from "./config/passport.config";
+import imageRouter from "./routes/image.route";
 
 dotenv.config(PATH_ENV);
 
@@ -33,6 +34,7 @@ app.use(
 app.use(passport.session());
 
 app.use("/", indexRouter);
+app.use("/images", imageRouter);
 
 // app.get("/", (req: Request, res: Response) => {
 //   res.send("Hello, Typescript with Express");
