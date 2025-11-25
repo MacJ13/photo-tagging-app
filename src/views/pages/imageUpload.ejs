@@ -130,4 +130,26 @@
     </div>
   </body>
 
+  <script>
+    const fileInput = document.getElementById('image');
+    const fileNameDisplay = document.getElementById('file-name-display');
+    const defaultText = 'Select Image to Upload';
+    fileInput.addEventListener('change', () => {
+
+      // console.log(fileInput.files);
+      
+      const selectedFile = fileInput.files.length > 0;
+
+      if(selectedFile) {
+        const filename = (fileInput.files[0].name);
+        
+          fileNameDisplay.textContent = "Image is selected:" + "\n" + filename;
+      } else {
+        fileNameDisplay.textContent = defaultText;
+      }
+     
+      
+    });
+
+  </script>
 </html>
