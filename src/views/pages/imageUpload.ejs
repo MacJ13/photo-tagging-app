@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><%= locals.title || "PHOTO APP ADMIN PANEL" %></title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f7fafc;
+      }
+      .container {
+        max-width: 420px;
+        margin: 48px auto;
+        background: #fff;
+        padding: 24px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      }
+      label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 600;
+      }
+      input[type="text"],
+      input[type="password"] {
+        width: 100%;
+        padding: 8px 10px;
+        margin-bottom: 6px;
+        border: 1px solid #e2e8f0;
+        border-radius: 4px;
+      }
+      button {
+        width: 100%;
+        padding: 10px;
+        background: #2b6cb0;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      a {
+        background: #2b6cb0;
+        color: white;
+        padding: 10px 15px;
+        text-decoration: none;  
+        border-radius: 4px;
+        font-weight: 600;
+        display: inline-block;
+      }
+      .help {
+        margin-top: 12px;
+        font-size: 13px;
+        color: #718096;
+      }
+      .field-error {
+        color: #c53030;
+        font-size: 13px;
+        margin-bottom: 6px;
+      }
+
+      .linkbox {
+        /* margin-top: 12px; */
+        text-transform: uppercase;
+      }
+
+      .heading-box {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px; 
+      }
+      .file-box {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        font-size: larger;
+        cursor: pointer;
+
+       
+      }
+      .field-error {
+        white-space: pre-wrap;
+        color: #c53030;
+        text-align: center;
+      }
+      .file-upload-box {
+        border: 1px dashed #a0aec0;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        
+        padding: 15px 0 10px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="heading-box">
+         <h1>Upload Image</h1>
+          <form action="/logout" method="POST">
+            <button type="submit">Logout</button>
+          </form>
+      </div>
+      <form method="POST" action="/images/upload" enctype="multipart/form-data">
+        <div class="file-upload-box">
+          <label for="image" class="file-box">
+            <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M13.5 3H12H8C6.34315 3 5 4.34315 5 6V18C5 19.6569 6.34315 21 8 21H12M13.5 3L19 8.625M13.5 3V7.625C13.5 8.17728 13.9477 8.625 14.5 8.625H19M19 8.625V11.8125" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M17.5 21L17.5 15M17.5 15L20 17.5M17.5 15L15 17.5" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span id="file-name-display">Select Image to Upload</span>
+          </label>
+          <% if (locals.errorMessage) { %>
+            <div class="field-error"><%= locals.errorMessage %></div>
+          <% } %>
+          <input
+            id="image"
+            type="file"
+            name="image"
+            accept="image/*"
+            required
+            hidden
+          />
+        </div>
+        <button type="submit">Upload Image</button>
+      </form>
+    </div>
+  </body>
+
+</html>
