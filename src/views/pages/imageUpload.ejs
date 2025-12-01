@@ -82,10 +82,16 @@
 
        
       }
-      .field-error {
+      .field-file-error {
         white-space: pre-wrap;
         color: #c53030;
         text-align: center;
+      }
+
+      .field-error {
+        color: #c53030;
+        font-size: 13px;
+        margin-bottom: 6px;
       }
       .file-upload-box {
         border: 1px dashed #a0aec0;
@@ -94,17 +100,53 @@
         
         padding: 15px 0 10px 0;
       }
+
+      .title-input-box {
+        margin-bottom: 12px;
+        width: 100%;
+      }
+
+      .title-input-box > input {
+        box-sizing: border-box;
+        width: 100%;
+      }
     </style>
   </head>
   <body>
     <div class="container">
       <div class="heading-box">
          <h1>Upload Image</h1>
+
+          <% 
+        // Accept validation errors passed either as `errors` (top-level) or as
+        // `locals.errors`. Also accept `formData` similarly.
+
+
+        const errors = locals.fieldErrors || undefined;
+      %>
           <form action="/logout" method="POST">
             <button type="submit">Logout</button>
           </form>
       </div>
       <form method="POST" action="/images/upload" enctype="multipart/form-data">
+        <div class="title-input-box">
+          <label for="imagetitle">enter an image title:</label>
+          <input
+            id="imagetitle"
+            type="text"
+            name="imagetitle"
+            autocomplete="username"
+             value="<%= locals.formData && locals.formData.imagetitle ? locals.formData.imagetitle : '' %>"
+          />
+          <% if (errors && errors.imagetitle) { %>
+            <ul class="field-error">
+              <% errors.imagetitle.forEach(errorMessage => { %>
+                <li><%= errorMessage %></li>
+              <% }) %>
+            </ul>
+          <!-- <div class="field-error"><%= errors.password %></div> -->
+          <% } %>
+        </div>
         <div class="file-upload-box">
           <label for="image" class="file-box">
             <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -113,15 +155,14 @@
             </svg>
             <span id="file-name-display">Select Image to Upload</span>
           </label>
-          <% if (locals.errorMessage) { %>
-            <div class="field-error"><%= locals.errorMessage %></div>
+          <% if (locals.fieldFileError) { %>
+            <div class="field-file-error"><%= locals.fieldFileError %></div>
           <% } %>
           <input
             id="image"
             type="file"
             name="image"
             accept="image/*"
-            required
             hidden
           />
         </div>
@@ -134,6 +175,8 @@
     const fileInput = document.getElementById('image');
     const fileNameDisplay = document.getElementById('file-name-display');
     const defaultText = 'Select Image to Upload';
+
+    const fileErrorMessage = document.querySelector(".field-file-error");
     fileInput.addEventListener('change', () => {
 
       // console.log(fileInput.files);
@@ -144,7 +187,11 @@
         const filename = (fileInput.files[0].name);
         
           fileNameDisplay.textContent = "Image is selected:" + "\n" + filename;
-      } else {
+          if(fileErrorMessage) {
+            fileErrorMessage.remove();
+          }
+      
+        } else {
         fileNameDisplay.textContent = defaultText;
       }
      

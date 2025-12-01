@@ -49,3 +49,12 @@ export const loginValidator = [
       return true;
     }),
 ];
+
+export const imageTitleValidator = [
+  body("imagetitle")
+    .trim()
+    .notEmpty()
+    .withMessage("Image title must be not empty")
+    .isLength({ min: 4 })
+    .withMessage("Title must be between 4 and 100 characters long"),
+];
