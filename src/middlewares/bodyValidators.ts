@@ -17,15 +17,22 @@ export const loginValidator = [
 
   body("password")
     .notEmpty()
-    .withMessage("Password is required")
+    .withMessage("Password must not be empty")
     .isLength({ min: 6 })
     .withMessage("Password must be at least 6 characters long")
     .custom(async (value, { req }) => {
       // Check if password is correct
       // This is a placeholder for actual password check
 
-      const passwordField = value;
-      const userNameField = req.body.username;
+      const passwordField = value as string;
+      const userNameField = req.body.username as string;
+
+      const properPasswordField = !passwordField || passwordField.length < 6;
+      const properUsernameField = !userNameField || userNameField.length < 3;
+
+      if (properPasswordField || properUsernameField) {
+        return;
+      }
       const user = await User.findOne({ username: userNameField });
       if (!user) {
         throw new Error("Username does not exist");

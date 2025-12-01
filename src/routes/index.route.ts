@@ -1,8 +1,7 @@
 import express from "express";
 import userController from "../controllers/user.controller";
-import { loginValidator } from "../middlewares/loginValidators";
+import { loginValidator } from "../middlewares/bodyValidators";
 import { handleValidationErrors } from "../middlewares/handleValidation";
-import passport from "passport";
 
 const indexRouter = express.Router();
 
@@ -14,10 +13,7 @@ indexRouter.post(
   "/login",
   loginValidator,
   handleValidationErrors,
-  passport.authenticate("local", {
-    failureRedirect: "/login",
-    successRedirect: "/dashboard",
-  })
+  userController.user_login_post
 );
 
 indexRouter.post("/logout", userController.user_logout_post);
