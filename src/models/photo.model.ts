@@ -3,6 +3,11 @@ import { Schema, model } from "mongoose";
 const PhotoSchema = new Schema({
   url: { type: String, required: true },
   title: { type: String, required: true },
+  width: { type: Number },
+  height: { type: Number },
+  assetFolder: { type: String },
+  publicId: { type: String },
+  bytes: { type: Number },
   objects: [{ type: Schema.Types.ObjectId, ref: "photoObject" }],
   uploadedAt: { type: Date, default: Date.now },
 });

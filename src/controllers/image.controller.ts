@@ -1,5 +1,10 @@
-import cloudinaryService from "../service/cloudinary.service";
+import { CloudinaryStorage } from "../service/image-storage/CloudinaryStorage";
+import { ImageStorage } from "../service/image-storage/ImageStorage";
+import { savePhotoInDB } from "../service/photo.service";
 import { HandlerType } from "../types/Handler";
+
+const imageStorageService: ImageStorage = new CloudinaryStorage();
+
 const image_index_get: HandlerType = (req, res, next) => {
   //   res.send("Image Index Page");
   res.render("pages/imageIndex", { title: "Image Index" });
@@ -10,8 +15,9 @@ const image_upload_get: HandlerType = (req, res, next) => {
 };
 
 const image_upload_post: HandlerType = async (req, res, next) => {
-  console.log(req.fileUloadError);
-  console.log(req.file);
+  // console.log(req.fileUloadError);
+  // console.log(req.file);
+
   if (req.fieldValidationError || req.fileUloadError || !req.file) {
     let noFileMessageError: string = "";
     if (!req.file) {
@@ -36,24 +42,33 @@ const image_upload_post: HandlerType = async (req, res, next) => {
   // }
 
   try {
-    const imageTitle = req.body.imagetitle;
+    const imageTitle = req.body.imagetitle as string;
 
-    console.log(imageTitle);
-    console.log(req.file);
-
-    res.redirect("/images");
     // console.log("file uploaded successfully");
     // console.log(req.file);
 
     // // console.log("Uploading to Cloudinary...");
     // console.log(cloudinary);
-    const uploaded = await cloudinaryService.upload_stream(
-      "photo-tagging-app/name",
+
+    const uploadedImageTitle = imageTitle.replace(/ /g, "-");
+
+    const uploadedFolder = `photo-tagging-app/${uploadedImageTitle}`;
+
+    const uploadedData = await imageStorageService.uploadImage(
+      uploadedFolder,
       req.file
     );
-    console.log("Uploaded to Cloudinary:", uploaded);
+    // const uploaded = await cloudinaryService.upload_stream(
+    //   "photo-tagging-app/name",
+    //   req.file
+    // );
+    // console.log("Uploaded to Cloudinary:", uploadedData);
+
+    //  save image data in db
+    await savePhotoInDB(uploadedImageTitle, uploadedData);
+
     // THIS WILL CONTINUE TO SAVE THE FILE TO DB OR FILE SYSTEM
-    res.render("pages/imageUpload", { title: "Upload Images" });
+    res.redirect("/images");
   } catch (error) {
     res.status(500).render("pages/imageUpload", {
       title: "Upload Images",
