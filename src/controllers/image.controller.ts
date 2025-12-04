@@ -1,13 +1,19 @@
 import { CloudinaryStorage } from "../service/image-storage/CloudinaryStorage";
 import { ImageStorage } from "../service/image-storage/ImageStorage";
-import { savePhotoInDB } from "../service/photo.service";
+import { getAllMainImagesInDB, savePhotoInDB } from "../service/photo.service";
 import { HandlerType } from "../types/Handler";
 
 const imageStorageService: ImageStorage = new CloudinaryStorage();
 
-const image_index_get: HandlerType = (req, res, next) => {
+const image_index_get: HandlerType = async (req, res, next) => {
   //   res.send("Image Index Page");
-  res.render("pages/imageIndex", { title: "Image Index" });
+  try {
+    const images = await getAllMainImagesInDB();
+    console.log({ images });
+    res.render("pages/imageIndex", { title: "Image Index", images: images });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 const image_upload_get: HandlerType = (req, res, next) => {

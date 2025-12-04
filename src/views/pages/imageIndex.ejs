@@ -71,6 +71,33 @@
         align-items: center;
         margin-bottom: 24px;
       }
+
+      .image-new-link {
+        margin-bottom: 15px;
+      }
+
+      .image-list-heading {
+        margin: 15px 0 10px 0;
+      }
+
+      .image-list {
+        padding: 0;
+        margin: 0;
+      }
+
+      .image-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 0 20px;
+        margin-bottom: 20px;
+        
+      }
+
+      .image-title {
+        font-weight: 600;
+
+      }
     </style>
   </head>
   <body>
@@ -82,16 +109,25 @@
             <button type="submit">Logout</button>
           </form>
       </div>
-        <% if (!locals.images || locals.images.length < 3) { %>
-
+      <a class="image-new-link" href="/images/upload">Upload new Image >></a>
+        <% if (!locals.images || !locals.images.length) { %>
         <p>No images found.</p>
 
-        <a href="/images/upload">Upload new Image set >></a>
         <% } else { %> 
-        <ul>
-       LIST   
+        <hr/>
+        <h3 class="image-list-heading">Added Images:</h3>
+       
+        <ol class="image-list">
+       
+          <% locals.images.forEach((image, index) => { %>
+            <li class="image-item"> 
+              <span class="image-title"><%= index+1 %>. <%= image.title.replace(/-/g, " ") %></span>
+              <a class="image-link" href="/images/<%= image._id.toString() %>">more >></a>
+            </li>
+          <% }) %>  
        </ul>
        <% } %>
+     
     </div>
   </body>
 </html>
