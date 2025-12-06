@@ -1,6 +1,10 @@
 import { CloudinaryStorage } from "../service/image-storage/CloudinaryStorage";
 import { ImageStorage } from "../service/image-storage/ImageStorage";
-import { getAllMainImagesInDB, savePhotoInDB } from "../service/photo.service";
+import {
+  getAllMainImagesInDB,
+  getMainImageByID,
+  savePhotoInDB,
+} from "../service/photo.service";
 import { HandlerType } from "../types/Handler";
 
 const imageStorageService: ImageStorage = new CloudinaryStorage();
@@ -11,6 +15,23 @@ const image_index_get: HandlerType = async (req, res, next) => {
     const images = await getAllMainImagesInDB();
     console.log({ images });
     res.render("pages/imageIndex", { title: "Image Index", images: images });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const image_detail_get: HandlerType = async (req, res, next) => {
+  try {
+    console.log({ params: req.params });
+
+    const imageId = req.params.imageId;
+
+    const mainImage = await getMainImageByID(imageId);
+
+    console.log({ mainImage });
+
+    console.log({ imageId });
+    res.render("pages/imageDetail", { title: "Image Detail", mainImage });
   } catch (err) {
     console.log(err);
   }
@@ -87,4 +108,5 @@ export default {
   image_index_get,
   image_upload_get,
   image_upload_post,
+  image_detail_get,
 };

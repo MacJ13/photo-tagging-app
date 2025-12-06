@@ -13,6 +13,8 @@ imageRouter.get("/", imageController.image_index_get);
 
 imageRouter.get("/upload", imageController.image_upload_get);
 
+imageRouter.get("/:imageId", imageController.image_detail_get);
+
 imageRouter.post(
   "/upload",
   upload.single("image"),

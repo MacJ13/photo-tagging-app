@@ -22,6 +22,16 @@ export const getAllMainImagesInDB = async () => {
     const allImages = await PhotoModel.find({}, "url title");
     return allImages;
   } catch (err) {
-    return new Error("something went wrong. Can not get photos");
+    return new Error("something went wrong. Cannot get photos");
+  }
+};
+
+export const getMainImageByID = async (imageId: string) => {
+  try {
+    const mainImage = await PhotoModel.findById(imageId).exec();
+
+    return mainImage;
+  } catch (err) {
+    return new Error("something went wrong. Cannot get specific photo");
   }
 };
