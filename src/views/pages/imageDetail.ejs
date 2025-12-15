@@ -102,14 +102,31 @@
       }
 
       .main-image {
+        position: relative;
         max-width: 100%;
       }
 .main-image > canvas {
       /* .main-image > img { */
+        position: relative;
         width: 100%;
         height: auto;
         display: block;
       }
+  .main-image > canvas:hover {
+        cursor: crosshair;
+      }
+  .main-image > canvas:active {
+        cursor: grabbing;
+      }
+
+  .main-image .element-object {
+        box-sizing: border-box;
+        position: absolute;
+        border: 1px solid #3182ce;
+        background: rgba(49, 130, 206, 0.3);
+        pointer-events: none;
+
+      }    
     </style>
   </head>
   <body>
@@ -154,6 +171,10 @@
      
     </div>
     <script>
+
+      const imageObjects = [];
+
+      
       document.addEventListener("DOMContentLoaded", () => {
         const canvas = document.getElementById("gameCanvas");
 
@@ -181,7 +202,160 @@
         image.onerror = () => {
           console.log("Error uploading photo in canvas")
         }
+
+        // variable to store size marking in context of original image size (3543x4961) 
+       let currentSelection = {
+        
+          startX: 0,
+          startY: 0,
+          width: 0,
+          height: 0
+       }   
+
+       // variable to store position beginning in screen pixels  
+       let startScreenX = 0;
+       let startScreenY = 0; 
+
+       let elementObjectImage = null;
+       let isDragging = false;
+
+       const getScalingRatio = () => {
+          const canvasRect = canvas.getBoundingClientRect();
+          return originalWidth / canvasRect.width;
+       }
+       const updateElementObjectPosition = (screenX, screenY, screenWidth, screenHeight) => {
+          if(!elementObjectImage) return;
+
+          const canvasRectangle = canvas.getBoundingClientRect();
+
+          const displayWidth = canvasRectangle.width;
+          const displayHeight = canvasRectangle.height;
+
+          const ratioX = displayWidth / originalWidth;
+          const ratioY = displayHeight / originalHeight;  
+
+          const displayLeft = currentSelection.startX * ratioX;
+          const displayTop = currentSelection.startY * ratioY;
+          const displayWidthRect = currentSelection.width * ratioX;
+          const displayHeightRect = currentSelection.height * ratioY;
+
+          elementObjectImage.style.left = displayLeft + "px";
+          elementObjectImage.style.top = displayTop + "px"; 
+          elementObjectImage.style.width = displayWidthRect + "px";
+          elementObjectImage.style.height = displayHeightRect + "px";
+
+       }
+
+
+       canvas.addEventListener("mousedown", (e) => {
+          if(isDragging && elementObjectImage) return;
+
+          isDragging = true;
+
+          
+
+          startScreenX = e.offsetX;
+          startScreenY = e.offsetY;
+
+          console.log(e.offsetX, e.offsetY, "Mouse down at (screen pixels)");
+
+          elementObjectImage = document.createElement("div");
+          elementObjectImage.classList.add("element-object");
+          document.querySelector(".main-image").appendChild(elementObjectImage);
+
+          elementObjectImage.style.left = startScreenX + "px";
+          elementObjectImage.style.top = startScreenY + "px";
+          elementObjectImage.style.width = "0px";
+          elementObjectImage.style.height = "0px";
+
+         
+       });  
+
+       canvas.addEventListener("mousemove", (e) => {
+          if(!elementObjectImage || !isDragging) return;
+
+          const currentScreenX = e.offsetX;
+          const currentScreenY = e.offsetY;
+
+          const scalingRatio = getScalingRatio();
+
+          console.log( "Scaling ratio: ",scalingRatio)
+          let widthScreen = currentScreenX - startScreenX;
+          console.log("Width screen:", widthScreen);
+          let heightScreen = currentScreenY - startScreenY;
+          console.log("Height screen:", heightScreen);
+
+          
+          let finalLeft = startScreenX
+
+          let finalTop = startScreenY;
+
+          console.log(finalLeft, finalTop, "Initial finalLeft and finalTop");
+          if(widthScreen < 0) {
+            finalLeft = currentScreenX;
+            widthScreen = Math.abs(widthScreen);
+          }
+          if(heightScreen < 0) {
+            finalTop = currentScreenY;
+            heightScreen = Math.abs(heightScreen);
+          }
+
+          console.log(finalLeft, finalTop, "Initial finalLeft and finalTop");
+
+        elementObjectImage.style.left = finalLeft + "px";
+        elementObjectImage.style.top = finalTop + "px";
+        elementObjectImage.style.width = widthScreen + "px";
+        elementObjectImage.style.height = heightScreen + "px";
+
+
+        canvas.addEventListener("mouseup", e => {
+        if (!elementObjectImage || !isDragging) return;
+
+        isDragging = false; 
+
+        const canvasRectangle = canvas.getBoundingClientRect();
+        const displayWidth = canvasRectangle.width;
+        const displayHeight = canvasRectangle.height;
+
+        console.log("Canvas display size:", displayWidth, displayHeight);
+
+        // Współczynnik skalowania, który był używany podczas rysowania na ekranie
+        const ratioX = originalWidth / displayWidth;
+        const ratioY = originalHeight / displayHeight;
+
+        console.log("Scaling ratios - X:", ratioX, "Y:", ratioY); 
+        // Ostateczne wymiary i pozycje elementu w pikselach ekranu
+        const rectLeft = Number(elementObjectImage.style.left.replace("px", ""));
+        const rectTop = Number(elementObjectImage.style.top.replace("px", ""));
+        const rectWidth = Number(elementObjectImage.style.width.replace("px", ""));
+        const rectHeight = Number(elementObjectImage.style.height.replace("px", ""));
+
+        // **Przeliczenie wymiarów ekranu na wymiary oryginalnego obrazu (3543x4961)**
+        currentSelection.startX = Math.round(rectLeft * ratioX);
+        currentSelection.startY = Math.round(rectTop * ratioY);
+        currentSelection.width = Math.round(rectWidth * ratioX);
+        currentSelection.height = Math.round(rectHeight * ratioY);
+
+        console.log("Oryginalne wymiary obiektu:", currentSelection);
+
+        // Po zakończeniu przeciągania, możemy od razu zastosować te same wymiary,
+        // używając funkcji updateElementObjectPosition
+        updateElementObjectPosition();
+    });
+
+    window.addEventListener('resize', () => {
+        // Ta funkcja jest wywoływana za każdym razem, gdy zmieniasz rozmiar okna
+        if (elementObjectImage) {
+            // Przelicz nową pozycję i wymiary
+            updateElementObjectPosition();
+        }
+    });
+       });  
+ 
+      
       })
+
+
     </script>
   </body>
 </html>
