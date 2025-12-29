@@ -257,7 +257,7 @@ input[type=number] {
           </form>
          
       </div>
-      <form id="formObjects" action="/images/<%= mainImage._id.toString() %>/" method="POST">
+      <form id="formObjects" action="/images/<%= mainImage._id.toString() %>/add" method="POST" enctype="multipart/form-data">
         <div class="object-groups">
           <div class="object-group" id="object1">
             <h4>Set First Object Data:</h4>
@@ -294,7 +294,7 @@ input[type=number] {
                   <path d="M17.5 21L17.5 15M17.5 15L20 17.5M17.5 15L15 17.5" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </label>
-              <input type="file" id="file1" name="objects[0][file]" hidden>
+             
             </div>
           </div>
           <div class="field-group" id="positionData1">
@@ -340,7 +340,7 @@ input[type=number] {
                     <path d="M17.5 21L17.5 15M17.5 15L20 17.5M17.5 15L15 17.5" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
                 </label>
-                <input type="file" id="file2" name="objects[1][file]" hidden>
+                
               </div>
             </div>
 
@@ -381,7 +381,7 @@ input[type=number] {
               </div>
               <div class="field">
                 <label for="file3"> Add Object Photo</label>
-                <input type="file" id="file3" name="objects[2][file]" hidden>
+               
               </div>
             </div>
             <div class="field-group" id="positionData3">
@@ -406,7 +406,7 @@ input[type=number] {
         </canvas>
       </div>
     </div>
-    <script>
+    <script nonce="<%= cspNonce %>">
 
       let activeObjectId = "";
       let isDragging = false;

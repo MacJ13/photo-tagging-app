@@ -3,4 +3,10 @@ declare namespace Express {
     fieldValidationError?: Record<string, String[]>;
     fileUloadError?: string;
   }
+
+    export interface Response {
+      locals: {
+        cspNonce?: string;
+      }
+    }
 }
