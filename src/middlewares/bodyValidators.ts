@@ -66,6 +66,6 @@ export const objectImageValidators = [
     'objects.*.startY',
     'objects.*.endX',
     'objects.*.endY'
-  ]).trim().notEmpty().withMessage(("object position must not be empty")).isInt({ min: 0}).withMessage('all coords must be '),
-  body("objects.*.filename").trim().notEmpty().withMessage("file name must not be empty").isLength({min: 3}).withMessage("file name must name at least 3 characters")
+  ]).trim().notEmpty().withMessage("must not be empty").isInt({ min: 0}).withMessage('must be a number'),
+  body("objects.*.filename").trim().notEmpty().withMessage("must not be empty").isLength({min: 3}).withMessage("must have at least 3 characters")
 ];

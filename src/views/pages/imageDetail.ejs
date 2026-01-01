@@ -247,6 +247,11 @@ input[type=number] {
 
     </style>
   </head>
+
+  <% 
+    const fieldError = locals.fieldError || null
+  
+  %>
   <body>
     <div class="container">
       <div class="heading-box">
@@ -266,18 +271,33 @@ input[type=number] {
               <div class="field">
                 <!-- <label for="left1">Start X</label> -->
                 <input type="number" id="startX1" hidden readonly value="<%= objects && objects[0] && objects[0].startX || '' %>"  name="objects[0][startX]">
+                <!-- <% if(fieldError && fieldError["objects[0].startX"]){ %>
+                  <div class="field-error">object position (start X, start Y, end X, end Y): <%= fieldError["objects[0].startX"].join(" and ") %></div>
+                <% } %> -->
+                <!-- <% if(fieldError && fieldError["objects[0].startX"]){ %>
+                  <div>position start X: <%= fieldError["objects[0].startX"] %></div>
+                <% } %> -->
               </div>
               <div class="field">
                 <!-- <label for="top1">End X</label -->
                 <input type="number" id="endX1" hidden readonly value="<%= objects && objects[0] && objects[0].endX || '' %>" name="objects[0][endX]">
+                <!-- <% if(fieldError && fieldError["objects[0].endX"]){ %>
+                  <div>position end X: <%= fieldError["objects[0].endX"] %></div>
+                <% } %>   -->
               </div>
               <div class="field">
                 <!-- <label for="width1">Start Y</label> -->
                 <input type="number" id="startY1" hidden readonly value="<%= objects && objects[0] && objects[0].startY || '' %>" name="objects[0][startY]">
+                <!-- <% if(fieldError && fieldError["objects[0].startY"]){ %>
+                  <div>position start Y: <%= fieldError["objects[0].startY"] %></div>
+                <% } %>   -->
               </div>
               <div class="field">
                 <!-- <label for="height1">End Y</label> -->
                 <input type="number" id="endY1" hidden readonly value="<%= objects && objects[0] && objects[0].endY || '' %>" name="objects[0][endY]">
+                <!-- <% if(fieldError && fieldError["objects[0].endY"]){ %>
+                  <div>position end Y: <%= fieldError["objects[0].endY"] %></div>
+                <% } %>  -->
               </div>
               
             </div>
@@ -302,6 +322,14 @@ input[type=number] {
               Position of object: none:
             </div>
           </div>
+          <div class="field-group-error">
+            <% if(fieldError && fieldError["objects[0].filename"]){ %>
+              <div class="field-error">filename: <%= fieldError["objects[2].filename"].join(" and ") %></div>
+            <% } %>
+            <% if(fieldError && fieldError["objects[0].startX"]){ %>
+              <div class="field-error">object position (start X, start Y, end X, end Y): <%= fieldError["objects[2].startX"].join(" and ") %></div>
+            <% } %>
+          </div>
           <div class="field-group">
             <button type="button" class="object-active">Active</button>
             <button type="button" class="object-active object-clear">Clear</button>
@@ -314,18 +342,33 @@ input[type=number] {
               <div class="field">
                 <!-- <label for="startX2">Start X</label> -->
                 <input type="number" id="startX2" hidden readonly  value="<%= objects && objects[1] && objects[1].startX || '' %>" name="objects[1][startX]">
+                <% if(fieldError && fieldError["objects[1].startX"]){ %>
+                  <div class="field-error">object position (start X, start Y, end X, end Y): <%= fieldError["objects[1].startX"].join(" and ") %></div>
+                <% } %>
+                <!-- <% if(fieldError && fieldError["objects[1].startX"]){ %>
+                  <div>position start X: <%= fieldError["objects[1].startX"] %></div>
+                <% } %> -->
               </div>
               <div class="field">
                 <!-- <label for="endX2">End X</label> -->
                 <input type="number" id="endX2" hidden readonly  value="<%= objects && objects[1] && objects[1].endX || '' %>" name="objects[1][endX]">
+                <!-- <% if(fieldError && fieldError["objects[1].endX"]){ %>
+                  <div>position end X: <%= fieldError["objects[1].endX"] %></div>
+                <% } %> -->
               </div>
               <div class="field">
                 <!-- <label for="startY2">Start Y</label> -->
                 <input type="number" id="startY2" hidden readonly  value="<%= objects && objects[1] && objects[1].startY || '' %>" name="objects[1][startY]">
+                <!-- <% if(fieldError && fieldError["objects[1].startY"]){ %>
+                  <div>position start Y: <%= fieldError["objects[1].startY"] %></div>
+                <% } %> -->
               </div>
               <div class="field">
                 <!-- <label for="endY2">End Y</label> -->
                 <input type="number" id="endY2" hidden readonly value="<%= objects && objects[1] && objects[1].endY || '' %>"  name="objects[1][endY]">
+                <!-- <% if(fieldError && fieldError["objects[1].endY"]){ %>
+                  <div>position end Y: <%= fieldError["objects[1].endY"] %></div>
+                <% } %> -->
               </div>
             </div>
             <div class="field-group">
@@ -347,7 +390,14 @@ input[type=number] {
             <div class="field-group" id="positionData2">
               <div class="field">Position of object: none</div>
             </div>
-
+            <div class="field-group-error">
+              <% if(fieldError && fieldError["objects[1].filename"]){ %>
+                <div class="field-error">filename: <%= fieldError["objects[2].filename"].join(" and ") %></div>
+              <% } %>
+              <% if(fieldError && fieldError["objects[1].startX"]){ %>
+                <div class="field-error">object position (start X, start Y, end X, end Y): <%= fieldError["objects[2].startX"].join(" and ") %></div>
+              <% } %>
+            </div>
             <div class="field-group">
               <button type="button" class="object-active">Active</button>
               <button type="button" class="object-active object-clear">Clear</button>
@@ -360,32 +410,60 @@ input[type=number] {
               <div class="field">
                 <!-- <label for="startX3">Start X</label> -->
                 <input type="number" id="startX3" hidden readonly value="<%= objects && objects[2] && objects[2].startX || '' %>"  name="objects[2][startX]">
+
+                <!-- <% if(fieldError && fieldError["objects[2].startY"]){ %>
+                  <div>position end X: <%= fieldError["objects[2].startY"] %></div>
+                <% } %> -->
               </div>
               <div class="field">
                 <!-- <label for="endX3">End X</label> -->
                 <input type="number" id="endX3" hidden readonly value="<%= objects && objects[2] && objects[2].endX || '' %>"  name="objects[2][endX]">
+                <!-- <% if(fieldError && fieldError["objects[2].endY"]){ %>
+                  <div>position end X: <%= fieldError["objects[2].startY"] %></div>
+                <% } %> -->
               </div>
               <div class="field">
                 <!-- <label for="startY3">Start Y</label> -->
                 <input type="number" id="startY3" hidden readonly  value="<%= objects && objects[2] && objects[2].startY || '' %>" name="objects[2][startY]">
+                <!-- <% if(fieldError && fieldError["objects[2].startY"]){ %>
+                  <div>position start Y: <%= fieldError["objects[2].startY"] %></div>
+                <% } %> -->
               </div>
               <div class="field">
                 <!-- <label for="endY3">End Y</label> -->
                 <input type="number" id="endY3" hidden readonly  value="<%= objects && objects[2] && objects[2].endY || '' %>" name="objects[2][endY]">
+                <!-- <% if(fieldError && fieldError["objects[2].endY"]){ %>
+                  <div>position end Y: <%= fieldError["objects[2].endY"] %></div>
+                <% } %> -->
               </div>   
+            </div>
+            <div class="field-group">
+              <div class="field">
+                <label for="file3"> Add Object Photo</label>
+                <input type="file" name="objects[2][file]" accept="image/*" hidden />
+                <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M13.5 3H12H8C6.34315 3 5 4.34315 5 6V18C5 19.6569 6.34315 21 8 21H12M13.5 3L19 8.625M13.5 3V7.625C13.5 8.17728 13.9477 8.625 14.5 8.625H19M19 8.625V11.8125" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M17.5 21L17.5 15M17.5 15L20 17.5M17.5 15L15 17.5" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
             </div>
             <div class="field-group">
               <div class="field">
                 <label for="filename3">Object Name</label>
                 <input type="text" id="filename3" name="objects[2][filename]" value="<%= objects && objects[2] && objects[2].filename || '' %>">
               </div>
-              <div class="field">
-                <label for="file3"> Add Object Photo</label>
-               
-              </div>
             </div>
+   
             <div class="field-group" id="positionData3">
               <div class="field">Position of object: none</div>
+            </div>
+            <div class="field-group-error">
+              <% if(fieldError && fieldError["objects[2].filename"]){ %>
+                <div class="field-error">filename: <%= fieldError["objects[2].filename"].join(" and ") %></div>
+              <% } %>
+              <% if(fieldError && fieldError["objects[2].startX"]){ %>
+                <div class="field-error">object position (start X, start Y, end X, end Y): <%= fieldError["objects[2].startX"].join(" and ") %></div>
+              <% } %>
             </div>
             <div class="field-group">
               <button type="button" class="object-active">Active</button>
@@ -746,6 +824,16 @@ input[type=number] {
           const objectImageDiv = document.getElementById("element-object-" + activeObjectId);
           if(!objectImageDiv) return;
           if ( !isDragging || !activeObjectId) return;
+
+          // console.log(objectImageDiv);
+
+          // check if field object positions error exist
+          // const fieldErrorDiv =  document.getElementById(activeObjectId).querySelector(".field-error");
+
+          // if(fieldErrorDiv) {
+          //   fieldErrorDiv.remove();
+          // }
+
 
           isDragging = false; 
 

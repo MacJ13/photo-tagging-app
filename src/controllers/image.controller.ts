@@ -42,18 +42,14 @@ const image_detail_post: HandlerType = async (req, res, next) => {
   console.log( "req body ",req.body);
 
   if(req.fieldValidationError) {
-      console.log(req.body);
 
       const objects = req.body.objects;
-
-      console.log({objects})
-      console.log(req.fieldValidationError);
 
        const imageId = req.params.imageId;
 
         const mainImage = await getMainImageByID(imageId);
 
-       res.render("pages/imageDetail", { title: "Image Detail", mainImage, objects })
+       res.render("pages/imageDetail", { title: "Image Detail", mainImage, objects, fieldError: req.fieldValidationError })
        return;
   }
 
