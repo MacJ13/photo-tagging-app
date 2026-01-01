@@ -58,3 +58,14 @@ export const imageTitleValidator = [
     .isLength({ min: 4 })
     .withMessage("Title must be between 4 and 100 characters long"),
 ];
+
+
+export const objectImageValidators = [
+  body([
+    'objects.*.startX',
+    'objects.*.startY',
+    'objects.*.endX',
+    'objects.*.endY'
+  ]).trim().notEmpty().withMessage(("object position must not be empty")).isInt({ min: 0}).withMessage('all coords must be '),
+  body("objects.*.filename").trim().notEmpty().withMessage("file name must not be empty").isLength({min: 3}).withMessage("file name must name at least 3 characters")
+];

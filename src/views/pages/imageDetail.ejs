@@ -262,29 +262,29 @@ input[type=number] {
           <div class="object-group" id="object1">
             <h4>Set First Object Data:</h4>
             <div class="field-group">
-              <input type="hidden" id="id1" name="objects[0][id]">
+          
               <div class="field">
                 <!-- <label for="left1">Start X</label> -->
-                <input type="number" id="startX1" hidden readonly name="objects[0][startX]">
+                <input type="number" id="startX1" hidden readonly value="<%= objects && objects[0] && objects[0].startX || '' %>"  name="objects[0][startX]">
               </div>
               <div class="field">
                 <!-- <label for="top1">End X</label -->
-                <input type="number" id="endX1" hidden readonly name="objects[0][endX]">
+                <input type="number" id="endX1" hidden readonly value="<%= objects && objects[0] && objects[0].endX || '' %>" name="objects[0][endX]">
               </div>
               <div class="field">
                 <!-- <label for="width1">Start Y</label> -->
-                <input type="number" id="startY1" hidden readonly name="objects[0][startY]">
+                <input type="number" id="startY1" hidden readonly value="<%= objects && objects[0] && objects[0].startY || '' %>" name="objects[0][startY]">
               </div>
               <div class="field">
                 <!-- <label for="height1">End Y</label> -->
-                <input type="number" id="endY1" hidden readonly name="objects[0][endY]">
+                <input type="number" id="endY1" hidden readonly value="<%= objects && objects[0] && objects[0].endY || '' %>" name="objects[0][endY]">
               </div>
               
             </div>
           <div class="field-group">
             <div class="field">
               <label for="filename1">Object Name</label>
-              <input type="text" id="filename1" name="objects[0][filename]">
+              <input type="text" id="filename1" name="objects[0][filename]" value="<%= objects && objects[0] && objects[0].filename || '' %>">
             </div>
             <div class="field field-file">
               <label for="file1"> 
@@ -310,28 +310,28 @@ input[type=number] {
           <div class="object-group" id="object2">
             <h4>Object 2</h4>
             <div class="field-group">
-              <input type="hidden" id="id2" name="objects[1][id]">
+           
               <div class="field">
                 <!-- <label for="startX2">Start X</label> -->
-                <input type="number" id="startX2" hidden readonly name="objects[1][startX]">
+                <input type="number" id="startX2" hidden readonly  value="<%= objects && objects[1] && objects[1].startX || '' %>" name="objects[1][startX]">
               </div>
               <div class="field">
                 <!-- <label for="endX2">End X</label> -->
-                <input type="number" id="endX2" hidden readonly name="objects[1][endX]">
+                <input type="number" id="endX2" hidden readonly  value="<%= objects && objects[1] && objects[1].endX || '' %>" name="objects[1][endX]">
               </div>
               <div class="field">
                 <!-- <label for="startY2">Start Y</label> -->
-                <input type="number" id="startY2" hidden readonly name="objects[1][startY]">
+                <input type="number" id="startY2" hidden readonly  value="<%= objects && objects[1] && objects[1].startY || '' %>" name="objects[1][startY]">
               </div>
               <div class="field">
                 <!-- <label for="endY2">End Y</label> -->
-                <input type="number" id="endY2" hidden readonly name="objects[1][endY]">
+                <input type="number" id="endY2" hidden readonly value="<%= objects && objects[1] && objects[1].endY || '' %>"  name="objects[1][endY]">
               </div>
             </div>
             <div class="field-group">
               <div class="field">
                 <label for="filename2">Object Name</label>
-                <input type="text" id="filename2" name="objects[1][filename]">
+                <input type="text" id="filename2" name="objects[1][filename]" value="<%= objects && objects[1] && objects[1].filename || '' %>">
               </div>
               <div class="field field-file">
                 <label for="file2">Add Object Photo 
@@ -356,28 +356,28 @@ input[type=number] {
           <div class="object-group" id="object3">
             <h4>Object 3</h4>
             <div class="field-group">
-              <input type="hidden" id="id3" hidden readonly name="objects[2][id]">
+            
               <div class="field">
                 <!-- <label for="startX3">Start X</label> -->
-                <input type="number" id="startX3" hidden readonly name="objects[2][startX]">
+                <input type="number" id="startX3" hidden readonly value="<%= objects && objects[2] && objects[2].startX || '' %>"  name="objects[2][startX]">
               </div>
               <div class="field">
                 <!-- <label for="endX3">End X</label> -->
-                <input type="number" id="endX3" hidden readonly name="objects[2][endX]">
+                <input type="number" id="endX3" hidden readonly value="<%= objects && objects[2] && objects[2].endX || '' %>"  name="objects[2][endX]">
               </div>
               <div class="field">
                 <!-- <label for="startY3">Start Y</label> -->
-                <input type="number" id="startY3" hidden readonly name="objects[2][startY]">
+                <input type="number" id="startY3" hidden readonly  value="<%= objects && objects[2] && objects[2].startY || '' %>" name="objects[2][startY]">
               </div>
               <div class="field">
                 <!-- <label for="endY3">End Y</label> -->
-                <input type="number" id="endY3" hidden readonly name="objects[2][endY]">
+                <input type="number" id="endY3" hidden readonly  value="<%= objects && objects[2] && objects[2].endY || '' %>" name="objects[2][endY]">
               </div>   
             </div>
             <div class="field-group">
               <div class="field">
                 <label for="filename3">Object Name</label>
-                <input type="text" id="filename3" name="objects[2][filename]">
+                <input type="text" id="filename3" name="objects[2][filename]" value="<%= objects && objects[2] && objects[2].filename || '' %>">
               </div>
               <div class="field">
                 <label for="file3"> Add Object Photo</label>
@@ -406,30 +406,57 @@ input[type=number] {
         </canvas>
       </div>
     </div>
+    <%
+    const imageObjectsData = {
+      object1: {
+        active: false,
+        ready: !!(objects && objects[0] && objects[0].startX),
+        currentSelection: {
+          startX: parseInt((objects && objects[0] && objects[0].startX) || 0, 10),
+          startY: parseInt((objects && objects[0] && objects[0].startY) || 0, 10),
+          width: (objects && objects[0] && objects[0].endX && objects[0].startX ? parseInt(objects[0].endX, 10) - parseInt(objects[0].startX, 10) : 0),
+          height: (objects && objects[0] && objects[0].endY && objects[0].startY ? parseInt(objects[0].endY, 10) - parseInt(objects[0].startY, 10) : 0),
+          endX: parseInt((objects && objects[0] && objects[0].endX) || 0, 10),
+          endY: parseInt((objects && objects[0] && objects[0].endY) || 0, 10)
+        }
+      },
+      object2: {
+        active: false,
+        ready: !!(objects && objects[1] && objects[1].startX),
+        currentSelection: {
+          startX: parseInt((objects && objects[1] && objects[1].startX) || 0, 10),
+          startY: parseInt((objects && objects[1] && objects[1].startY) || 0, 10),
+          width: (objects && objects[1] && objects[1].endX && objects[1].startX ? parseInt(objects[1].endX, 10) - parseInt(objects[1].startX, 10) : 0),
+          height: (objects && objects[1] && objects[1].endY && objects[1].startY ? parseInt(objects[1].endY, 10) - parseInt(objects[1].startY, 10) : 0),
+          endX: parseInt((objects && objects[1] && objects[1].endX) || 0, 10),
+          endY: parseInt((objects && objects[1] && objects[1].endY) || 0, 10)
+        }
+      },
+      object3: {
+        active: false,
+        ready: !!(objects && objects[2] && objects[2].startX),
+        currentSelection: {
+          startX: parseInt((objects && objects[2] && objects[2].startX) || 0, 10),
+          startY: parseInt((objects && objects[2] && objects[2].startY) || 0, 10),
+          width: (objects && objects[2] && objects[2].endX && objects[2].startX ? parseInt(objects[2].endX, 10) - parseInt(objects[2].startX, 10) : 0),
+          height: (objects && objects[2] && objects[2].endY && objects[2].startY ? parseInt(objects[2].endY, 10) - parseInt(objects[2].startY, 10) : 0),
+          endX: parseInt((objects && objects[2] && objects[2].endX) || 0, 10),
+          endY: parseInt((objects && objects[2] && objects[2].endY) || 0, 10)
+        }
+      }
+    };
+    %>
     <script nonce="<%= cspNonce %>">
 
       let activeObjectId = "";
       let isDragging = false;
       let elementObjectImage = null;
 
-      const imageObjects = {
-        object1: {active: false, ready: false, currentSelection: { startX: 0,
-          startY: 0,
-          width: 0,
-          height: 0, endX: 0, endY: 0} },
-        object2: {active: false, ready: false, currentSelection: { startX: 0,
-          startY: 0,
-          width: 0,
-          height: 0, endX: 0, endY: 0} },
-        object3: {active: false, ready: false, currentSelection: { startX: 0,
-          startY: 0,
-          width: 0,
-          height: 0, endX: 0, endY: 0} }
-      }
+      const imageObjects = <%- JSON.stringify(imageObjectsData) %>;
 
       // function to set field values in form
       function setFieldValues(objectId, selection) {    
-        const numberId = activeObjectId.slice(-1)
+        const numberId = objectId.slice(-1)
             
       
         document.getElementById(`startX${numberId}`).value = selection.startX;
@@ -769,6 +796,33 @@ input[type=number] {
           // by using function updateElementObjectPosition
           updateElementObjectPosition(activeObjectId);
 
+        });
+
+        // Initialize existing objects if any
+        Object.entries(imageObjects).forEach(([key, value]) => {
+          if (value.ready) {
+            const elementObjectImage = document.createElement("div");
+            elementObjectImage.id = "element-object-" + key;
+            elementObjectImage.classList.add("element-object");
+            document.querySelector(".main-image").appendChild(elementObjectImage);
+
+            // Position the element
+            const canvasRect = canvas.getBoundingClientRect();
+            const ratioX = canvasRect.width / originalWidth;
+            const ratioY = canvasRect.height / originalHeight;
+
+            const displayLeft = value.currentSelection.startX * ratioX;
+            const displayTop = value.currentSelection.startY * ratioY;
+            const displayWidth = value.currentSelection.width * ratioX;
+            const displayHeight = value.currentSelection.height * ratioY;
+
+            elementObjectImage.style.left = displayLeft + "px";
+            elementObjectImage.style.top = displayTop + "px";
+            elementObjectImage.style.width = displayWidth + "px";
+            elementObjectImage.style.height = displayHeight + "px";
+
+            setFieldValues(key, value.currentSelection);
+          }
         });
 
         window.addEventListener('resize', () => {

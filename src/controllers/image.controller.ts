@@ -31,11 +31,39 @@ const image_detail_get: HandlerType = async (req, res, next) => {
     console.log({ mainImage });
 
     console.log({ imageId });
-    res.render("pages/imageDetail", { title: "Image Detail", mainImage });
+    res.render("pages/imageDetail", { title: "Image Detail", mainImage, objects: [] });
   } catch (err) {
     console.log(err);
   }
 };
+
+const image_detail_post: HandlerType = async (req, res, next) => {
+ 
+  console.log( "req body ",req.body);
+
+  if(req.fieldValidationError) {
+      console.log(req.body);
+
+      const objects = req.body.objects;
+
+      console.log({objects})
+      console.log(req.fieldValidationError);
+
+       const imageId = req.params.imageId;
+
+        const mainImage = await getMainImageByID(imageId);
+
+       res.render("pages/imageDetail", { title: "Image Detail", mainImage, objects })
+       return;
+  }
+
+  req.body.objects.forEach((obj: any) => {
+    console.log(obj.filename);
+    console.log(obj.startX, obj.endX)
+    console.log(obj.startY, obj.endY)
+  })
+   res.render("pages/imageUpload", { title: "Upload Images" });
+}
 
 const image_upload_get: HandlerType = (req, res, next) => {
   res.render("pages/imageUpload", { title: "Upload Images" });
@@ -109,4 +137,5 @@ export default {
   image_upload_get,
   image_upload_post,
   image_detail_get,
+  image_detail_post
 };
