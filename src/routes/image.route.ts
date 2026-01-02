@@ -4,8 +4,10 @@ import imageController from "../controllers/image.controller";
 import { multerErrorHandler } from "../middlewares/multerErrorHandler";
 import { requireAuth } from "../middlewares/requireAuth";
 import { upload } from "../config/multer.config";
-import { objectImageValidators } from "../middlewares/bodyValidators";
+import { imageTitleValidator, objectImageValidators } from "../middlewares/bodyValidators";
 import { handleValidationErrors } from "../middlewares/handleValidation";
+
+import {validateAllObjectImageFiles }from "../middlewares/validateAllObjectImageFiles";
 
 const imageRouter = express.Router();
 
@@ -23,6 +25,8 @@ imageRouter.post(
   "/upload",
   upload.single("image"),
   multerErrorHandler,
+  imageTitleValidator,
+  handleValidationErrors, 
   imageController.image_upload_post
 );
 
