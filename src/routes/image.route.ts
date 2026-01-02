@@ -30,6 +30,17 @@ imageRouter.post(
   imageController.image_upload_post
 );
 
-imageRouter.post("/:imageId/add",  upload.any(), objectImageValidators, handleValidationErrors, imageController.image_detail_post);
+imageRouter.post("/:imageId/add",  
+  upload.fields([
+    { name: 'objects[0][file]', maxCount: 1 },
+    { name: 'objects[1][file]', maxCount: 1 },
+    { name: 'objects[2][file]', maxCount: 1 }
+  ]),
+  multerErrorHandler,
+  validateAllObjectImageFiles,
+  objectImageValidators, 
+  handleValidationErrors, 
+  imageController.image_detail_post
+);
 
 export default imageRouter;

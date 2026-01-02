@@ -39,10 +39,20 @@ const image_detail_get: HandlerType = async (req, res, next) => {
 
 const image_detail_post: HandlerType = async (req, res, next) => {
  
-  console.log( "req body ",req.body);
+  // console.log( "req body ",req.body);
 
-  if(req.fieldValidationError) {
+  // console.log("req. files ", req.files)
+  // console.log(req.files);
 
+   
+    // console.log(uploadImageValues);
+    // console.log({length: uploadImageValues.length})
+
+  console.log( "error upload file: ",req.fileUloadError) ;
+  if(req.fieldValidationError || req.fileUloadError) {
+
+
+    console.log(req.fileUloadError);
       const objects = req.body.objects;
 
        const imageId = req.params.imageId;
@@ -52,12 +62,28 @@ const image_detail_post: HandlerType = async (req, res, next) => {
        res.render("pages/imageDetail", { title: "Image Detail", mainImage, objects, fieldError: req.fieldValidationError })
        return;
   }
+   const uploadedImages = req.files as { [fieldname: string]: Express.Multer.File[] | undefined };
+    const uploadImageValues = Object.values(uploadedImages);
 
-  req.body.objects.forEach((obj: any) => {
-    console.log(obj.filename);
-    console.log(obj.startX, obj.endX)
-    console.log(obj.startY, obj.endY)
-  })
+  // req.body.objects.forEach((obj: any, index: number) => {
+
+  //   console.log("/////////////////////////////////////////")
+  //   console.log(obj.filename);
+  //   console.log(obj.startX, obj.endX)
+  //   console.log(obj.startY, obj.endY)
+  //   // console.log(uploadedImages[`object["${index}"][file]`])
+
+  //    if(!uploadImageValues[index]) return; 
+
+  //   const [uploadedFileImage] = uploadImageValues[index] as Express.Multer.File[] ;
+   
+  //   console.log(uploadedFileImage.fieldname)
+  //   console.log(uploadedFileImage.originalname);
+  //   console.log(uploadedFileImage.buffer);
+  //   console.log(uploadedFileImage.size);
+  //   console.log(uploadedFileImage.mimetype);
+
+  // })
    res.render("pages/imageUpload", { title: "Upload Images" });
 }
 
@@ -102,6 +128,7 @@ const image_upload_post: HandlerType = async (req, res, next) => {
     // console.log(cloudinary);
 
     const uploadedImageTitle = imageTitle.replace(/ /g, "-");
+    console.log({uploadedImageTitle});
 
     const uploadedFolder = `photo-tagging-app/${uploadedImageTitle}`;
 
@@ -109,6 +136,8 @@ const image_upload_post: HandlerType = async (req, res, next) => {
       uploadedFolder,
       req.file
     );
+
+    console.log({uploadedData})
     // const uploaded = await cloudinaryService.upload_stream(
     //   "photo-tagging-app/name",
     //   req.file
