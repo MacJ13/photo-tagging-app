@@ -1,7 +1,14 @@
+interface FileErrorInfo {
+  code: string,
+  field: string,
+  message: string,
+}
+
+
 declare namespace Express {
   export interface Request {
     fieldValidationError?: Record<string, String[]>;
-    fileUloadError?: string;
+    fileUploadErrors?: Record<string, FileErrorInfo>
   }
 
     export interface Response {
@@ -10,3 +17,5 @@ declare namespace Express {
       }
     }
 }
+
+// req.fileUloadError = {code: err.code, field: err.field as string, err}

@@ -31,6 +31,7 @@ const image_detail_get: HandlerType = async (req, res, next) => {
     console.log({ mainImage });
 
     console.log({ imageId });
+
     res.render("pages/imageDetail", { title: "Image Detail", mainImage, objects: [] });
   } catch (err) {
     console.log(err);
@@ -48,42 +49,41 @@ const image_detail_post: HandlerType = async (req, res, next) => {
     // console.log(uploadImageValues);
     // console.log({length: uploadImageValues.length})
 
-  console.log( "error upload file: ",req.fileUloadError) ;
-  if(req.fieldValidationError || req.fileUloadError) {
+  console.log( "error upload file: ",req.fileUploadErrors) ;
+  if(req.fieldValidationError || req.fileUploadErrors) {
 
-
-    console.log(req.fileUloadError);
+    
       const objects = req.body.objects;
 
        const imageId = req.params.imageId;
 
         const mainImage = await getMainImageByID(imageId);
 
-       res.render("pages/imageDetail", { title: "Image Detail", mainImage, objects, fieldError: req.fieldValidationError })
+       res.render("pages/imageDetail", { title: "Image Detail", mainImage, objects, fieldError: req.fieldValidationError, fileError: req.fileUploadErrors })
        return;
   }
    const uploadedImages = req.files as { [fieldname: string]: Express.Multer.File[] | undefined };
     const uploadImageValues = Object.values(uploadedImages);
 
-  // req.body.objects.forEach((obj: any, index: number) => {
+  req.body.objects.forEach((obj: any, index: number) => {
 
-  //   console.log("/////////////////////////////////////////")
-  //   console.log(obj.filename);
-  //   console.log(obj.startX, obj.endX)
-  //   console.log(obj.startY, obj.endY)
-  //   // console.log(uploadedImages[`object["${index}"][file]`])
+    console.log("/////////////////////////////////////////")
+    console.log(obj.filename);
+    console.log(obj.startX, obj.endX)
+    console.log(obj.startY, obj.endY)
+    // console.log(uploadedImages[`object["${index}"][file]`])
 
-  //    if(!uploadImageValues[index]) return; 
+     if(!uploadImageValues[index]) return; 
 
-  //   const [uploadedFileImage] = uploadImageValues[index] as Express.Multer.File[] ;
+    const [uploadedFileImage] = uploadImageValues[index] as Express.Multer.File[] ;
    
-  //   console.log(uploadedFileImage.fieldname)
-  //   console.log(uploadedFileImage.originalname);
-  //   console.log(uploadedFileImage.buffer);
-  //   console.log(uploadedFileImage.size);
-  //   console.log(uploadedFileImage.mimetype);
+    console.log(uploadedFileImage.fieldname)
+    console.log(uploadedFileImage.originalname);
+    console.log(uploadedFileImage.buffer);
+    console.log(uploadedFileImage.size);
+    console.log(uploadedFileImage.mimetype);
 
-  // })
+  })
    res.render("pages/imageUpload", { title: "Upload Images" });
 }
 
@@ -95,16 +95,26 @@ const image_upload_post: HandlerType = async (req, res, next) => {
   // console.log(req.fileUloadError);
   // console.log(req.file);
 
-  if (req.fieldValidationError || req.fileUloadError || !req.file) {
-    let noFileMessageError: string = "";
-    if (!req.file) {
-      noFileMessageError = "No file uploaded";
+  if (req.fieldValidationError || req.fileUploadErrors || !req.file) {
+    // let noFileMessageError: string = "";
+    // if (!req.file) {
+    //   noFileMessageError = "No file uploaded";
+    // }
+    req.fileUploadErrors = {}
+
+    if(!req.file) {
+    
+      req.fileUploadErrors["image"] = {
+        code: "REQUIRED_FILE",
+        field: "image",
+        message: "Missing file. Photo is required"
+      } 
     }
 
     return res.render("pages/imageUpload", {
       title: "Upload Images",
       fieldErrors: req.fieldValidationError,
-      fieldFileError: req.fileUloadError || noFileMessageError || "",
+      fieldFileError: req.fileUploadErrors,
       formData: req.body,
     });
   }

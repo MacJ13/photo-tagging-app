@@ -12,13 +12,16 @@ export const multerErrorHandler: ErrorRequestHandler = (
   res: Response,
   next: NextFunction
 ) => {
+
+  if(!req.fileUploadErrors) req.fileUploadErrors = {};
   
   if (err instanceof multer.MulterError) {
 
-     console.log("file", req.file, req.files);
-     console.log(err.code, err.field, err.message, err.name, err.stack);
+    //  console.log("file", req.file, req.files);
+    //  console.log(err.code, err.field, err.message, err.name, err.stack);
+    const fieldName = err.field || "general";
 
-    let errorMessage: string = "sending file failed";
+    let errorMessage: string = "";
 
     switch (err.code) {
       case "LIMIT_FILE_SIZE":
@@ -34,18 +37,24 @@ export const multerErrorHandler: ErrorRequestHandler = (
         errorMessage = `Upload error: ${err.message}`;
 
     }
-    // if (err.code === "LIMIT_FILE_SIZE") {
-    //   errorMessage = "File size exceeds the allowed limit";
-    // } else {
-    //   errorMessage = "multer error: " + err.message;
-    // }
 
-    req.fileUloadError = errorMessage;
+    req.fileUploadErrors[fieldName] = {
+      code: err.code,
+      field: fieldName,
+      message: errorMessage
+    }
+
     return next();
   }
 
   if (err instanceof Error && err.message === "Only image files are allowed") {
-    req.fileUloadError = err.message;
+    const fieldName = (err as any).field || "general";
+
+    req.fileUploadErrors[fieldName] = {
+      code: "INVALID_FORMAT",
+      field: fieldName,
+      message: err.message
+    }
     return next();
   }
 

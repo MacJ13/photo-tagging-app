@@ -136,7 +136,7 @@
   padding: 15px;
   border-radius: 4px;
   margin-bottom: 15px;
-  cursor: pointer;
+
   position: relative;
 }
 
@@ -250,7 +250,7 @@ input[type=number] {
 
   <% 
     const fieldError = locals.fieldError || null
-  
+    const fileError = locals.fileError || null
   %>
   <body>
     <div class="container">
@@ -262,6 +262,7 @@ input[type=number] {
           </form>
          
       </div>
+
       <form id="formObjects" action="/images/<%= mainImage._id.toString() %>/add" method="POST" enctype="multipart/form-data">
         <div class="object-groups">
           <div class="object-group" id="object1">
@@ -301,20 +302,26 @@ input[type=number] {
               </div>
               
             </div>
+
+            <div class="field-group">
+              <div class="field field-file">
+                <label for="file1"> Add Object Photo
+                  <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M13.5 3H12H8C6.34315 3 5 4.34315 5 6V18C5 19.6569 6.34315 21 8 21H12M13.5 3L19 8.625M13.5 3V7.625C13.5 8.17728 13.9477 8.625 14.5 8.625H19M19 8.625V11.8125" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M17.5 21L17.5 15M17.5 15L20 17.5M17.5 15L15 17.5" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                     <span class="file-name-display">
+                        <%= (fileError && fileError["objects[0][file]"]) ? fileError["objects[0][file]"].message : "" %>
+                      </span>
+                </label>
+                <input id="file1" type="file" name="objects[0][file]" accept="image/*" hidden />
+              </div>
+            </div>
+
           <div class="field-group">
             <div class="field">
               <label for="filename1">Object Name</label>
               <input type="text" id="filename1" name="objects[0][filename]" value="<%= objects && objects[0] && objects[0].filename || '' %>">
-            </div>
-            <div class="field field-file">
-              <label for="file1"> 
-                Add Object Photo        
-                <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M13.5 3H12H8C6.34315 3 5 4.34315 5 6V18C5 19.6569 6.34315 21 8 21H12M13.5 3L19 8.625M13.5 3V7.625C13.5 8.17728 13.9477 8.625 14.5 8.625H19M19 8.625V11.8125" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M17.5 21L17.5 15M17.5 15L20 17.5M17.5 15L15 17.5" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </label>
-             
             </div>
           </div>
           <div class="field-group" id="positionData1">
@@ -324,7 +331,7 @@ input[type=number] {
           </div>
           <div class="field-group-error">
             <% if(fieldError && fieldError["objects[0].filename"]){ %>
-              <div class="field-error">filename: <%= fieldError["objects[2].filename"].join(" and ") %></div>
+              <div class="field-error">filename: <%= fieldError["objects[2].filename"] %></div>
             <% } %>
             <% if(fieldError && fieldError["objects[0].startX"]){ %>
               <div class="field-error">object position (start X, start Y, end X, end Y): <%= fieldError["objects[2].startX"].join(" and ") %></div>
@@ -371,19 +378,24 @@ input[type=number] {
                 <% } %> -->
               </div>
             </div>
+
             <div class="field-group">
-              <div class="field">
-                <label for="filename2">Object Name</label>
-                <input type="text" id="filename2" name="objects[1][filename]" value="<%= objects && objects[1] && objects[1].filename || '' %>">
-              </div>
               <div class="field field-file">
-                <label for="file2">Add Object Photo 
+                <label for="file2"> Add Object Photo
                   <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M13.5 3H12H8C6.34315 3 5 4.34315 5 6V18C5 19.6569 6.34315 21 8 21H12M13.5 3L19 8.625M13.5 3V7.625C13.5 8.17728 13.9477 8.625 14.5 8.625H19M19 8.625V11.8125" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M17.5 21L17.5 15M17.5 15L20 17.5M17.5 15L15 17.5" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
+                  <span class="file-name-display"><%= (fileError && fileError["objects[1][file]"]) ? fileError["objects[1][file]"].message : "" %></span>
                 </label>
-                
+                <input id="file2" type="file" name="objects[1][file]" accept="image/*" hidden />
+              </div>
+            </div>
+
+            <div class="field-group">
+              <div class="field">
+                <label for="filename2">Object Name</label>
+                <input type="text" id="filename2" name="objects[1][filename]" value="<%= objects && objects[1] && objects[1].filename || '' %>">
               </div>
             </div>
 
@@ -392,7 +404,7 @@ input[type=number] {
             </div>
             <div class="field-group-error">
               <% if(fieldError && fieldError["objects[1].filename"]){ %>
-                <div class="field-error">filename: <%= fieldError["objects[2].filename"].join(" and ") %></div>
+                <div class="field-error">filename: <%= fieldError["objects[1].filename"] %></div>
               <% } %>
               <% if(fieldError && fieldError["objects[1].startX"]){ %>
                 <div class="field-error">object position (start X, start Y, end X, end Y): <%= fieldError["objects[2].startX"].join(" and ") %></div>
@@ -438,13 +450,16 @@ input[type=number] {
               </div>   
             </div>
             <div class="field-group">
-              <div class="field">
-                <label for="file3"> Add Object Photo</label>
-                <input type="file" name="objects[2][file]" accept="image/*" hidden />
-                <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M13.5 3H12H8C6.34315 3 5 4.34315 5 6V18C5 19.6569 6.34315 21 8 21H12M13.5 3L19 8.625M13.5 3V7.625C13.5 8.17728 13.9477 8.625 14.5 8.625H19M19 8.625V11.8125" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M17.5 21L17.5 15M17.5 15L20 17.5M17.5 15L15 17.5" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
+              <div class="field field-file">
+                <label for="file3"> 
+                  Add Object Photo
+                  <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M13.5 3H12H8C6.34315 3 5 4.34315 5 6V18C5 19.6569 6.34315 21 8 21H12M13.5 3L19 8.625M13.5 3V7.625C13.5 8.17728 13.9477 8.625 14.5 8.625H19M19 8.625V11.8125" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M17.5 21L17.5 15M17.5 15L20 17.5M17.5 15L15 17.5" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                     <span class="file-name-display"><%= (fileError && fileError["objects[2][file]"]) ? fileError["objects[2][file]"].message : "" %></span>
+                </label>
+                <input id="file3" type="file" name="objects[2][file]" accept="image/*" hidden />
               </div>
             </div>
             <div class="field-group">
@@ -570,9 +585,11 @@ input[type=number] {
 
      
 
-
-      ///////// CLICK EVENT ON ACTIVE AND CLEAR BUTTONS ///////////
       const objectGroupsDiv =  document.querySelector(".object-groups");
+      ///////// CLICK EVENT ON ACTIVE AND CLEAR BUTTONS ///////////
+      
+
+
       
       objectGroupsDiv.addEventListener("click", (e) => {
         const objectGroupFieldDivs = objectGroupsDiv.querySelectorAll(".object-group"); 
