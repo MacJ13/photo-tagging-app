@@ -589,7 +589,49 @@ input[type=number] {
       ///////// CLICK EVENT ON ACTIVE AND CLEAR BUTTONS ///////////
       
 
+      objectGroupsDiv.addEventListener("change", (e) => {
 
+        const fileInput = e.target.closest("input[type='file']");
+
+        console.dir(fileInput);
+
+        if(fileInput) {
+          
+          // const fileNameDisplay = fieldFileDiv.querySelector('.file-name-display');
+
+
+          const selectedFile = fileInput.files.length > 0;
+
+          if(selectedFile)  {
+            // console.log({ file: fileInput.files })
+          
+            const filename = fileInput.files[0].name;
+        
+            const parentEl = fileInput.parentNode;
+            const fileNameDisplayDiv = parentEl.querySelector('.file-name-display');
+
+            fileNameDisplayDiv.textContent = "Image is selected:" + "\n" + filename;
+            // if(fileErrorMessage) {
+            //   fileErrorMessage.remove();
+            // }
+          } else {
+             fileNameDisplayDiv.textContent = "";
+          }
+        }
+
+            //         <div class="field-group">
+            //   <div class="field field-file">
+            //     <label for="file3"> 
+            //       Add Object Photo
+            //       <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            //         <path d="M13.5 3H12H8C6.34315 3 5 4.34315 5 6V18C5 19.6569 6.34315 21 8 21H12M13.5 3L19 8.625M13.5 3V7.625C13.5 8.17728 13.9477 8.625 14.5 8.625H19M19 8.625V11.8125" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            //         <path d="M17.5 21L17.5 15M17.5 15L20 17.5M17.5 15L15 17.5" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            //       </svg>
+            //     </label>
+            //     <input id="file3" type="file" name="objects[2][file]" accept="image/*" hidden />
+            //   </div>
+            // </div>
+      })
       
       objectGroupsDiv.addEventListener("click", (e) => {
         const objectGroupFieldDivs = objectGroupsDiv.querySelectorAll(".object-group"); 
