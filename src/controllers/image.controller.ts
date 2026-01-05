@@ -2,6 +2,7 @@ import { CloudinaryStorage } from "../service/image-storage/CloudinaryStorage";
 import { ImageStorage } from "../service/image-storage/ImageStorage";
 import {
   getAllMainImagesInDB,
+  getMainImageAssetFolder,
   getMainImageByID,
   savePhotoInDB,
 } from "../service/photo.service";
@@ -55,16 +56,46 @@ const image_detail_post: HandlerType = async (req, res, next) => {
     
       const objects = req.body.objects;
 
-       const imageId = req.params.imageId;
+      const imageId = req.params.imageId;
 
-        const mainImage = await getMainImageByID(imageId);
+      const mainImage = await getMainImageByID(imageId);
 
        res.render("pages/imageDetail", { title: "Image Detail", mainImage, objects, fieldError: req.fieldValidationError, fileError: req.fileUploadErrors })
        return;
   }
-   const uploadedImages = req.files as { [fieldname: string]: Express.Multer.File[] | undefined };
-    const uploadImageValues = Object.values(uploadedImages);
 
+  try {
+    const imageId = req.params.imageId;
+
+    const uploadedImages = req.files as { [fieldname: string]: Express.Multer.File[] | undefined };
+    const uploadImageValues = Object.values(uploadedImages);    
+
+    const uploadImageTest = uploadImageValues.flat().filter(Boolean) as Express.Multer.File[];
+
+    console.log({uploadImageTest})
+
+    // get asset folder by main image to save object image in proper directory
+    const mainImageAssetFolder = await getMainImageAssetFolder(imageId) as string;
+
+
+    // create array of upload object images to cloudinary
+    const uploadObjectImageCloudinary = uploadImageTest.map(async (file) => {
+      return await imageStorageService.uploadImage(mainImageAssetFolder, file);
+    })
+
+    // upload all object images to cloudinary
+    const savedImageCloudinary = await Promise.all(uploadObjectImageCloudinary);
+    
+    console.log("PHOTOS OBJECTS ARE ADDED TO CLOUDINARY")
+    console.log(savedImageCloudinary);
+    // const uploadObjectPhotoFiles = 
+
+    console.log({mainImageAssetFolder})
+
+    // console.log({uploadImageValuesTest})
+    
+    
+    
   req.body.objects.forEach((obj: any, index: number) => {
 
     console.log("/////////////////////////////////////////")
@@ -85,6 +116,10 @@ const image_detail_post: HandlerType = async (req, res, next) => {
 
   })
    res.render("pages/imageUpload", { title: "Upload Images" });
+  } catch(err) {
+
+  }
+   
 }
 
 const image_upload_get: HandlerType = (req, res, next) => {

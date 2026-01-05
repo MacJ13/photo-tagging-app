@@ -35,3 +35,13 @@ export const getMainImageByID = async (imageId: string) => {
     return new Error("something went wrong. Cannot get specific photo");
   }
 };
+
+export const getMainImageAssetFolder = async (imageId: string) => {
+  try {
+    const mainImage = await PhotoModel.findById(imageId, "assetFolder").exec();
+
+    return mainImage?.assetFolder;
+  } catch (err) {
+    return new Error("something went wrong. Cannot get specific photo name");
+  }     
+};
