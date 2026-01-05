@@ -1,11 +1,12 @@
 import { CloudinaryStorage } from "../service/image-storage/CloudinaryStorage";
-import { ImageStorage } from "../service/image-storage/ImageStorage";
+import { ImageStorage, UploadImageObjectResult } from "../service/image-storage/ImageStorage";
 import {
   getAllMainImagesInDB,
   getMainImageAssetFolder,
   getMainImageByID,
   savePhotoInDB,
 } from "../service/photo.service";
+import { savePhotoObjectsInDB } from "../service/photoObject.service";
 import { HandlerType } from "../types/Handler";
 
 const imageStorageService: ImageStorage = new CloudinaryStorage();
@@ -88,38 +89,45 @@ const image_detail_post: HandlerType = async (req, res, next) => {
     
     console.log("PHOTOS OBJECTS ARE ADDED TO CLOUDINARY")
     console.log(savedImageCloudinary);
-    // const uploadObjectPhotoFiles = 
 
     console.log({mainImageAssetFolder})
 
-    // console.log({uploadImageValuesTest})
+
+
     
     
-    
-  req.body.objects.forEach((obj: any, index: number) => {
+  const imageObjectData: UploadImageObjectResult[] = req.body.objects.map((obj: any, index: number) => {
+    const saveImageObj = savedImageCloudinary[index];
+    const newObjet = {
+      label: obj.filename,
+      startX: obj.startX,
+      endX: obj.endX,
+      endY: obj.endY,
+      startY: obj.startY, 
+      
+      displayName: saveImageObj.displayName,
+      url: saveImageObj.url,
+      assetFolder: saveImageObj.assetFolder,
+      publicId: saveImageObj.publicId,
+      bytes: saveImageObj.bytes,
+      width: saveImageObj.width,
+      height: saveImageObj.height,
 
-    console.log("/////////////////////////////////////////")
-    console.log(obj.filename);
-    console.log(obj.startX, obj.endX)
-    console.log(obj.startY, obj.endY)
-    // console.log(uploadedImages[`object["${index}"][file]`])
-
-     if(!uploadImageValues[index]) return; 
-
-    const [uploadedFileImage] = uploadImageValues[index] as Express.Multer.File[] ;
-   
-    console.log(uploadedFileImage.fieldname)
-    console.log(uploadedFileImage.originalname);
-    console.log(uploadedFileImage.buffer);
-    console.log(uploadedFileImage.size);
-    console.log(uploadedFileImage.mimetype);
-
+    }
+    return newObjet;
   })
-   res.render("pages/imageUpload", { title: "Upload Images" });
-  } catch(err) {
 
+  console.log({imageObjectData})
+
+  await savePhotoObjectsInDB(imageId, imageObjectData); 
+  console.log("PHOTO OBJECTS SAVED IN DB");
+
+
+  res.redirect(`/images/`);
+  //  res.render("pages/imageUpload", { title: "Upload Images" });
+  } catch(err) {
+    console.log(err);
   }
-   
 }
 
 const image_upload_get: HandlerType = (req, res, next) => {
